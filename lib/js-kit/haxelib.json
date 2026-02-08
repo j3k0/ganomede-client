@@ -1,0 +1,10 @@
+{
+    "name": "js-kit",
+    "url": "https://github.com/clemos/haxe-js-kit",
+    "description": "A Javascript/Node.js Toolkit for Haxe",
+    "license": "MIT",
+    "releasenote": "Initial release",
+    "contributors": ["clemos","cloudshift","async-cl","dionjwa","Peekmo","andyli","slerdoze","nesbox","ccapndave","labe-me"],
+    "version": "0.0.1",
+    "tags": ["node", "nodejs", "js","express","mongoose","connect","socket","mongodb","mean"]
+}
