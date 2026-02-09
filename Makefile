@@ -11,7 +11,7 @@ help:
 
 bin/ganomede.swc:
 	@mkdir -p bin
-	./haxe -swf bin/ganomede.swc -dce no -lib openfl -cp src ${HAXE_MAIN}
+	./haxe -swf bin/ganomede.swc -dce no -D no-swf-compress -lib openfl -cp src ${HAXE_MAIN}
 
 bin/ganomede-as3:
 	@mkdir -p bin
@@ -19,7 +19,7 @@ bin/ganomede-as3:
 
 swc:
 	@mkdir -p bin
-	./haxe -swf bin/ganomede.swc -dce no -lib openfl -cp src ${HAXE_MAIN}
+	./haxe -swf bin/ganomede.swc -dce no -D no-swf-compress -lib openfl -cp src ${HAXE_MAIN}
 
 as3:
 	@mkdir -p bin
