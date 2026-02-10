@@ -218,6 +218,12 @@ class GanomedeUsers extends ApiClient
         var data:Object = { value: value };
         setUserCache('auth/' + me.token, key, data);
         setUserCache(me.username, key, data);
+        if (me.metadata == null)
+            me.metadata = {};
+        if (key == 'email')
+            me.email = value;
+        else
+            Reflect.setField(me.metadata, key, value);
         return ajax("POST", endpoint, {
             data: data
         });

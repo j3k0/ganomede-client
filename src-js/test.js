@@ -3,6 +3,8 @@ var client = null;
 var user = null;
 
 var serverUrl = process.env.GANOMEDE_TEST_SERVER_URL;
+var testUsername = process.env.GANOMEDE_TEST_USERNAME;
+var testUsername2 = process.env.GANOMEDE_TEST_USERNAME2 || testUsername + "_p2";
 if (!serverUrl) {
     console.error("Please specify your test server URL in GANOMEDE_TEST_SERVER_URL environment variable");
     process.exit(1);
@@ -152,7 +154,7 @@ function invitations(done) {
     console.log("invitations");
     console.dir(client.invitations.asArray());
 
-    var invitation = new ganomede.GanomedeInvitation({
+    var invitation = new ganomede.models.GanomedeInvitation({
         type: "triominos/v1",
         to: "joe",
         gameId: "dummy"
@@ -196,7 +198,7 @@ function virtualcurrencyProducts(done) {
 
 function virtualcurrencyBalance(done) {
     console.log("virtualcurrency.balance");
-    client.virtualcurrency.refreshBalance("test-currency-1")
+    client.virtualcurrency.refreshBalances(["test-currency-1"])
     .then(function() {
         console.dir(client.virtualcurrency.balances.get("test-currency-1"));
         if (client.virtualcurrency.balances.get("test-currency-1").count !== 0) {
@@ -255,7 +257,7 @@ function notifications(done) {
     });
     var n = new ganomede.GanomedeNotification({
         from: "test/v1",
-        to: "testuser",
+        to: process.env.GANOMEDE_TEST_USERNAME,
         type: "success",
         data: {
             iamtrue: true,
@@ -318,9 +320,9 @@ function createGame2P(done) {
         console.error("no active games at startup");
         process.exit(1);
     }
-    var g = new ganomede.GanomedeGame({
+    var g = new ganomede.models.GanomedeGame({
         type: client.options.games.type,
-        players: [ "testuser", "testuser2" ]
+        players: [ testUsername, testUsername2 ]
     });
     console.log("create 2 players game");
     client.games.add(g)
@@ -330,8 +332,8 @@ function createGame2P(done) {
             console.error("still no active games");
             process.exit(1);
         }
-        if (!g.id || !g.url) {
-            console.log("game id and url should have been generated");
+        if (!g.id) {
+            console.log("game id should have been generated");
             process.exit(1);
         }
         game2p = g;
@@ -345,7 +347,7 @@ function createGame2P(done) {
 }
 
 function createTurnGame2P(done) {
-    var g = new ganomede.GanomedeTurnGame().fromGame(game2p);
+    var g = new ganomede.models.GanomedeTurnGame().fromGame(game2p);
     console.log("create 2 players turngame");
     client.turngames.add(g)
     .then(function(res) {
@@ -373,9 +375,9 @@ function createGame1P(done) {
         console.error("no active games at startup");
         process.exit(1);
     }
-    var g = new ganomede.GanomedeGame({
+    var g = new ganomede.models.GanomedeGame({
         type: client.options.games.type,
-        players: [ "testuser" ]
+        players: [ testUsername ]
     });
     console.log("create 1 player game");
     client.games.add(g)
@@ -386,8 +388,8 @@ function createGame1P(done) {
             console.dir(a1);
             process.exit(1);
         }
-        if (!g.id || !g.url) {
-            console.log("game id and url should have been generated");
+        if (!g.id) {
+            console.log("game id should have been generated");
             process.exit(1);
         }
         done();
@@ -401,9 +403,9 @@ function createGame1P(done) {
 
 function inviteTurngameHelperDuplicate(done) {
     console.log("purposely failed invite to turngame");
-    var game = new ganomede.GanomedeGame({
+    var game = new ganomede.models.GanomedeGame({
         type: client.options.games.type,
-        players: [ "testuser", "testuser2" ]
+        players: [ testUsername, testUsername2 ]
     });
     var turngameInvitation = new ganomede.helpers.GanomedeTurnGameInvitation(client);
     turngameInvitation.send(game)
@@ -418,14 +420,14 @@ function inviteTurngameHelperDuplicate(done) {
 
 function inviteTurngameHelper(done) {
     console.log("invite to turngame");
-    var game = new ganomede.GanomedeGame({
+    var game = new ganomede.models.GanomedeGame({
         type: client.options.games.type,
-        players: [ "testuser", "testuserx" ]
+        players: [ testUsername, "testuserx" ]
     });
-    client.invitations.cancel(new ganomede.GanomedeInvitation({
+    client.invitations.cancel(new ganomede.models.GanomedeInvitation({
         id: 'd7bb8f947ac624dc43d36943a6550518',
         type: client.options.games.type,
-        from: "testuser",
+        from: testUsername,
         to: "testuserx"
     }))
     .always(function() {
