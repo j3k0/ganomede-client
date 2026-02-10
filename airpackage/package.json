@@ -4,9 +4,9 @@
     "url": "https://github.com/j3k0/ganomede-client",
     "docUrl": "https://github.com/j3k0/ganomede-client",
     "description": "Client-side library to interact with a Ganomede server",
-    "sourceUrl": "https://github.com/j3k0/ganomede-client/releases/download/v1.0.5/cc.fovea.ganomede_1.0.5.airpackage",
+    "sourceUrl": "https://github.com/j3k0/ganomede-client/releases/download/v1.0.6/cc.fovea.ganomede_1.0.6.airpackage",
     "type": "swc",
-    "version":"1.0.5",
+    "version":"1.0.6",
     "license": {
         "type": "Unlicensed",
         "public": false
