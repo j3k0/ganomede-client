@@ -92,6 +92,7 @@ class AjaxOpenFL implements IAjax
         urlRequest.requestHeaders.push(new URLRequestHeader("Accept", "application/json"));
         urlRequest.requestHeaders.push(new URLRequestHeader("X-Request-Id", requestID));
         urlRequest.requestHeaders.push(new URLRequestHeader("X-App-Version", Ajax.xAppVersionHeader));
+        urlRequest.requestHeaders.push(new URLRequestHeader("X-Device-Id", Ajax.xDeviceIdHeader));
         // Ajax.dtrace("AJAX[" + requestID.substr(0, 4) + "] xAppVersion=" + Ajax.xAppVersionHeader);
 
         var urlLoader:URLLoader = new URLLoader();

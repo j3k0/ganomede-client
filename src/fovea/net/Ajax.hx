@@ -27,6 +27,7 @@ class Ajax implements IAjax extends Events
 {
     public static var verbose:Bool = false;
     public static var xAppVersionHeader:String = "";
+    public static var xDeviceIdHeader:String = "";
     public static var dtrace = function(txt:String):Void {
         if (verbose)
             trace(txt);
@@ -103,6 +104,7 @@ class Ajax extends Events
 {
     public static var verbose:Bool = false;
     public static var xAppVersionHeader:String = "";
+    public static var xDeviceIdHeader:String = "";
     public static var dtrace = function(txt:String):Void {
         if (verbose)
             trace(txt);
@@ -197,6 +199,7 @@ class Ajax extends Events
             method: method,
             headers: {
                 "X-App-Version": Ajax.xAppVersionHeader,
+                "X-Device-Id": Ajax.xDeviceIdHeader,
                 "Content-type": "application/json",
                 'Content-Length': data.length
             }
