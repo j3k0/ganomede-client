@@ -5,7 +5,13 @@ jobs:
     docker:
       - image: jeko/haxe-openfl
     steps:
-      - checkout
+      - run:
+          name: Checkout code
+          command: |
+            # Force HTTPS for public repos (jeko/haxe-openfl has no SSH keys)
+            REPO_URL=$(echo "$CIRCLE_REPOSITORY_URL" | sed 's|git@github.com:|https://github.com/|')
+            git clone --depth 1 "$REPO_URL" .
+            git checkout -q "$CIRCLE_SHA1"
       - run:
           name: Build JavaScript library
           command: |
