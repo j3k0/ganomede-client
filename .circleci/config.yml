@@ -1,0 +1,47 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: jeko/haxe-openfl
+    steps:
+      - checkout
+      - run:
+          name: Build JavaScript library
+          command: make js
+      - run:
+          name: Build SWC library
+          command: make swc
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bin/
+
+  test:
+    docker:
+      - image: cimg/node:18.20
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run integration tests (requires GANOMEDE_TEST_SERVER_URL)
+          command: |
+            if [ -z "$GANOMEDE_TEST_SERVER_URL" ]; then
+              echo "GANOMEDE_TEST_SERVER_URL not set — skipping integration tests"
+              exit 0
+            fi
+            npm test
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
