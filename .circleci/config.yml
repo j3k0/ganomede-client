@@ -8,10 +8,14 @@ jobs:
       - checkout
       - run:
           name: Build JavaScript library
-          command: make js
+          command: |
+            mkdir -p bin
+            haxe -js bin/ganomede.js -lib openfl -cp lib/js-kit -cp src fovea.ganomede.Ganomede
       - run:
           name: Build SWC library
-          command: make swc
+          command: |
+            mkdir -p bin
+            haxe -swf bin/ganomede.swc -dce no -D no-swf-compress -lib openfl -cp src fovea.ganomede.Ganomede
       - persist_to_workspace:
           root: .
           paths:
