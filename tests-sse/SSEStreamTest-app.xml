@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/51.0">
+    <id>SSEStreamTest</id>
+    <filename>SSEStreamTest</filename>
+    <name>SSEStreamTest</name>
+    <versionNumber>1.0.0</versionNumber>
+    <initialWindow><content>SSEStreamTest.swf</content><visible>false</visible></initialWindow>
+</application>
