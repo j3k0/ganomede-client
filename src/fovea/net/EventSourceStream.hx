@@ -18,8 +18,8 @@ import flash.utils.ByteArray;
  * - Parses `event:`, `id:` and `data:` fields; comments (`:ping`) only feed the watchdog.
  * - Reconnects with capped exponential backoff and +/-25% jitter, sending `Last-Event-ID`.
  * - Dead-link watchdog: no bytes received for WATCHDOG_MS => close and reconnect.
- *   (Server heartbeats every 15s; the platform backstop is URLRequestDefaults.idleTimeout,
- *   set by the app.)
+ *   (Server heartbeats every 15s.) The platform backstop is the request's idleTimeout
+ *   (IDLE_TIMEOUT_MS), set on the stream request only so other requests keep their default.
  * - Gives up (onFailure) on a non-retryable answer (4xx, wrong Content-Type) or after
  *   MAX_FAILURES_WITHOUT_DATA consecutive attempts that never produced a single SSE frame.
  *   The caller is expected to fall back to long-polling.
@@ -27,6 +27,7 @@ import flash.utils.ByteArray;
 class EventSourceStream
 {
     public static var WATCHDOG_MS:Int = 40000;
+    public static var IDLE_TIMEOUT_MS:Int = 80000;
     public static var BACKOFF_BASE_MS:Int = 1000;
     public static var BACKOFF_CAP_MS:Int = 30000;
     public static var MAX_FAILURES_WITHOUT_DATA:Int = 3;
@@ -89,6 +90,8 @@ class EventSourceStream
 
         var request = new URLRequest(url);
         request.method = "GET";
+        // URLRequest.idleTimeout is AIR-only (not in the Haxe externs).
+        try { Reflect.setField(request, "idleTimeout", IDLE_TIMEOUT_MS); } catch (e:Dynamic) {}
         var headers:Array<URLRequestHeader> = [
             new URLRequestHeader("Accept", "text/event-stream"),
             new URLRequestHeader("X-App-Version", Ajax.xAppVersionHeader),
