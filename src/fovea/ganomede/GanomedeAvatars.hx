@@ -32,8 +32,13 @@ class GanomedeAvatars extends ApiClient
         this.client = client;
     }
 
+    // Never rejects: /about only provides the optional CDN host. When it
+    // fails (offline, avatars down), user() falls back to the direct URL.
+    // A rejection here would fail Ganomede.initialize() and leave every
+    // module of the facade null (FOV-3040).
     public function initialize():Promise {
-        return ajax("GET", "/about")
+        var deferred:Deferred = new Deferred();
+        ajax("GET", "/about")
         .then(function(outcome:Object):Void {
             var o:Object = outcome.data;
             initialized = true;
@@ -43,7 +48,13 @@ class GanomedeAvatars extends ApiClient
                 else if (o.config.cdn)
                     cdnHost = o.config.cdn;
             }
+            deferred.resolve(outcome);
+        })
+        .error(function(err:Dynamic):Void {
+            initialized = true;
+            deferred.resolve(null);
         });
+        return deferred;
     }
 
 #if flash
